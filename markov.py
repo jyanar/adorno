@@ -1,11 +1,4 @@
-""" Generation of pseudo-random text through Markov chains. Utilizes the tweepy
-library, and follows examples provided by both Shabda Raaj [0] (for building 
-Markov chains) and Molly White's tutorial on building Twitter bots [1]. 
-Shabda Raaj [0].
-
-[0]: http://agiliq.com/blog/2009/06/generating-pseudo-random-text-with-markov-chains-u/
-[1]: http://blog.mollywhite.net/twitter-bots-pt2/
-"""
+#!/bin/python3
 
 import os
 import tweepy
