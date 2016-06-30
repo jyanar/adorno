@@ -1,4 +1,4 @@
-# adorno
+# [adorno](https://twitter.com/adorno_ebooks)
 
 Generation of pseudo-random text through Markov chains. Utilizes the tweepy
 library and follows examples provided by both Shabda Raaj [(for building 
