@@ -86,12 +86,28 @@ def get_140_chars(text):
         return ""
 
 def create_tweet():
+    """ Constructs markov chain from corpus and generates a suitable tweet. """
     corpus = get_corpus("/home/jorge/twitter-adorno/adorno.txt")
     markov_chain = construct_markov_chain(corpus)
     tweet = get_140_chars(generate_text(markov_chain))
-    while tweet == "" or tweet[0].islower():
+    while check_tweet == False:
         tweet = get_140_chars(generate_text(markov_chain))
     return tweet
+
+def check_tweet(corpus, tweet):
+    """ 
+    Checks that generated tweet is good for usage, and is 
+    not a direct quote from the corpus.
+    """
+    if tweet == "" or tweet[0].islower():
+        return False
+    # Check that tweet isn't in the corpus.
+    tweet = tweet.split(" ")
+    indices = [i for (i, word) in enumerate(corpus) if tweet[0] == word]
+    for i in indices:
+        if tweet == corpus[i : i+len(tweet)]:
+            return False
+    return True
 
 def send_tweet(text):
     """ Send out the text as a tweet. """
