@@ -87,7 +87,7 @@ def get_140_chars(text):
 
 def create_tweet():
     """ Constructs markov chain from corpus and generates a suitable tweet. """
-    corpus = get_corpus("/Users/jorge/Dropbox/code/Projects/adorno/adorno.txt")
+    corpus = get_corpus("/home/jorge/adorno/adorno.txt")
     markov_chain = construct_markov_chain(corpus)
     tweet = get_140_chars(generate_text(markov_chain))
     while check_tweet(corpus, tweet) == False:
