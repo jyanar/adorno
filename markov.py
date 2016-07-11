@@ -92,22 +92,51 @@ def create_tweet():
     tweet = get_140_chars(generate_text(markov_chain))
     while check_tweet(corpus, tweet) == False:
         tweet = get_140_chars(generate_text(markov_chain))
-    return tweet
+    return clean_tweet(tweet)
 
 def check_tweet(corpus, tweet):
     """ 
     Checks that generated tweet is good for usage, and is 
     not a direct quote from the corpus.
     """
-    if tweet == "" or tweet[0].islower():
+    if tweet == "" or tweet[0].islower() or len(tweet) < 5:
         return False
     # Check that tweet isn't in the corpus.
-    tweet = tweet.split(" ")
-    indices = [i for (i, word) in enumerate(corpus) if tweet[0] == word]
+    split_tweet = tweet.split(" ")
+    indices = [i for (i, word) in enumerate(corpus) if split_tweet[0] == word]
     for i in indices:
-        if tweet == corpus[i : i+len(tweet)]:
+        if split_tweet == corpus[i : i+len(split_tweet)]:
             return False
     return True
+
+def clean_tweet(tweet):
+    """
+    Checks that punctuation in the tweet is balanced. If it is not, relevant
+    punctuation marks are removed.
+    """
+    parens = 0
+    square = 0
+    quotes = 0
+    for i in range(len(tweet)):
+        if tweet[i] == '(':
+            parens += 1
+        elif tweet[i] == ')':
+            parens -= 1
+        elif tweet[i] == '[':
+            square += 1
+        elif tweet[i] == ']':
+            square -= 1
+        elif tweet[i] == '“':
+            quotes += 1
+        elif tweet[i] == '”':
+            quotes -= 1
+    if parens != 0:
+        tweet = ''.join(list(filter(lambda ch: ch not in '()', tweet)))
+    if square != 0:
+        tweet = ''.join(list(filter(lambda ch: ch not in '[]', tweet)))
+    if quotes % 2 != 0:
+        tweet = ''.join(list(filter(lambda ch: ch not in '“”',  tweet)))
+    return tweet
 
 def send_tweet(text):
     """ Send out the text as a tweet. """
