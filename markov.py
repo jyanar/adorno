@@ -9,8 +9,8 @@ random.seed()
 
 # == Bot configuration =========================================================
 
-bot_username = "adorno_ebooks"
-logfile_name = bot_username + ".log"
+bot_username = 'adorno_ebooks'
+logfile_name = bot_username + '.log'
 
 # ==============================================================================
 
@@ -19,7 +19,7 @@ def get_corpus(file_name):
     Reads a file into memory and parses it into a list of words that
     make up the corpus.
     """
-    lines = [l.strip() for l in open(file_name, 'r', encoding="utf-8").readlines()]
+    lines = [l.strip() for l in open(file_name, 'r', encoding='utf-8').readlines()]
     lines = list(filter(None, lines))
     return " ".join(lines).split(" ")
 
@@ -53,16 +53,16 @@ def generate_text(markov_chain, num_words=30):
        state.
     3. goto 2.
     """
-    output = ""
+    output = ''
     current_state = random.choice(list(markov_chain.keys()))
-    while current_state[1][-1] == "." or current_state[0][0].islower():
+    while current_state[1][-1] == '.' or current_state[0][0].islower():
         current_state = random.choice(list(markov_chain.keys()))
     # Now we get traverse the graph
-    output += current_state[0] + " " + current_state[1] + " "
+    output += current_state[0] + ' ' + current_state[1] + ' '
     while num_words > 0:
         current_state = take_step(markov_chain, current_state)
         current_state = take_step(markov_chain, current_state)
-        output += current_state[0] + " " + current_state[1] + " "
+        output += current_state[0] + ' ' + current_state[1] + ' '
         num_words -= 1
     return output
 
@@ -83,7 +83,7 @@ def get_140_chars(text):
     if stop_found == True:
         return text[:(140 - i + 1)]
     else:
-        return ""
+        return ''
 
 def create_tweet():
     """ Constructs markov chain from corpus and generates a suitable tweet. """
@@ -99,10 +99,10 @@ def check_tweet(corpus, tweet):
     Checks that generated tweet is good for usage, and is 
     not a direct quote from the corpus.
     """
-    if tweet == "" or tweet[0].islower() or len(tweet) < 5:
+    if tweet == '' or tweet[0].islower() or len(tweet) < 5:
         return False
     # Check that tweet isn't in the corpus.
-    split_tweet = tweet.split(" ")
+    split_tweet = tweet.split(' ')
     indices = [i for (i, word) in enumerate(corpus) if split_tweet[0] == word]
     for i in indices:
         if split_tweet == corpus[i : i+len(split_tweet)]:
@@ -151,17 +151,17 @@ def send_tweet(text):
     except tweepy.error.TweepError as e:
         log(e.message)
     else:
-        log("Tweeted: " + text)
+        log('Tweeted: ' + text)
 
 def log(message):
     """ Log message to logfile. """
     path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     with open(os.path.join(path, logfile_name), 'a+') as f:
-        t = strftime("%d %b %Y %H:%M:%S", gmtime())
-        f.write("\n" + t + " " + message)
+        t = strftime('%d %b %Y %H:%M:%S', gmtime())
+        f.write("\n" + t + ' ' + message)
 
 ###############################################################################
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     tweet_text = create_tweet()
     send_tweet(tweet_text)
