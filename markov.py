@@ -72,7 +72,7 @@ def get_140_chars(text):
     through the string and returns however many sentences are in the range
     of 140 characters. If no suitable sentences are found (e.g., if no period
     is found in the first 140 characters) then return an empty string. Note
-    that we assume that the string is longer than 140 characters. 
+    that we assume that the string is longer than 140 characters.
     """
     stops = ['.', '?', '!']
     stop_found = False
@@ -85,18 +85,9 @@ def get_140_chars(text):
     else:
         return ''
 
-def create_tweet():
-    """ Constructs markov chain from corpus and generates a suitable tweet. """
-    corpus = get_corpus("/home/jorge/adorno/adorno.txt")
-    markov_chain = construct_markov_chain(corpus)
-    tweet = get_140_chars(generate_text(markov_chain))
-    while check_tweet(corpus, tweet) == False:
-        tweet = get_140_chars(generate_text(markov_chain))
-    return clean_tweet(tweet)
-
 def check_tweet(corpus, tweet):
-    """ 
-    Checks that generated tweet is good for usage, and is 
+    """
+    Checks that generated tweet is good for usage, and is
     not a direct quote from the corpus.
     """
     if tweet == '' or tweet[0].islower() or len(tweet) < 5:
@@ -138,6 +129,15 @@ def clean_tweet(tweet):
         tweet = ''.join(list(filter(lambda ch: ch not in '“”',  tweet)))
     return tweet
 
+def create_tweet():
+    """ Constructs markov chain from corpus and generates a suitable tweet. """
+    corpus = get_corpus("/home/jorge/adorno/adorno.txt")
+    markov_chain = construct_markov_chain(corpus)
+    tweet = get_140_chars(generate_text(markov_chain))
+    while check_tweet(corpus, tweet) == False:
+        tweet = get_140_chars(generate_text(markov_chain))
+    return clean_tweet(tweet)
+
 def send_tweet(text):
     """ Send out the text as a tweet. """
     # Twitter authentication
@@ -160,8 +160,9 @@ def log(message):
         t = strftime('%d %b %Y %H:%M:%S', gmtime())
         f.write("\n" + t + ' ' + message)
 
-###############################################################################
+# ==============================================================================
 
 if __name__ == '__main__':
     tweet_text = create_tweet()
     send_tweet(tweet_text)
+
