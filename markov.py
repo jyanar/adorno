@@ -55,7 +55,8 @@ def generate_text(markov_chain, num_words=30):
     """
     output = ''
     current_state = random.choice(list(markov_chain.keys()))
-    while current_state[1][-1] == '.' or current_state[0][0].islower():
+    while (current_state[1][-1] in ['.', '!', '[', ']', '?', '(', ')'] or
+           current_state[0][0].islower()):
         current_state = random.choice(list(markov_chain.keys()))
     # Now we get traverse the graph
     output += current_state[0] + ' ' + current_state[1] + ' '
@@ -131,7 +132,8 @@ def clean_tweet(tweet):
 
 def create_tweet():
     """ Constructs markov chain from corpus and generates a suitable tweet. """
-    corpus = get_corpus("/home/jorge/adorno/adorno.txt")
+    #corpus = get_corpus("/home/jorge/adorno/adorno.txt")
+    corpus = get_corpus("/Users/jorge/Drive/code/Projects/adorno/adorno.txt")
     markov_chain = construct_markov_chain(corpus)
     tweet = get_140_chars(generate_text(markov_chain))
     while check_tweet(corpus, tweet) == False:
