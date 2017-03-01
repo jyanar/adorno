@@ -56,7 +56,8 @@ def generate_text(markov_chain, num_words=30):
     output = ''
     current_state = random.choice(list(markov_chain.keys()))
     while (current_state[1][-1] in ['.', '!', '[', ']', '?', '(', ')'] or
-           current_state[0][0].islower()):
+           current_state[0][0].islower() or
+	   not current_state[0][0].isalpha()):
         current_state = random.choice(list(markov_chain.keys()))
     # Now we get traverse the graph
     output += current_state[0] + ' ' + current_state[1] + ' '
